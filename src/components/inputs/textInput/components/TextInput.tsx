@@ -35,8 +35,6 @@ type TextInputProps = {
 
 const defaultBackgroundColor = '#ffffff';
 const defaultTextColor = '#303235';
-// CDN link for default send sound
-const defaultSendSound = 'https://cdn.jsdelivr.net/gh/FlowiseAI/FlowiseChatEmbed@latest/src/assets/send_message.mp3';
 
 export const TextInput = (props: TextInputProps) => {
   const [isSendButtonDisabled, setIsSendButtonDisabled] = createSignal(false);
@@ -117,8 +115,6 @@ export const TextInput = (props: TextInputProps) => {
     if (props.sendMessageSound) {
       if (props.sendSoundLocation) {
         audioRef = new Audio(props.sendSoundLocation);
-      } else {
-        audioRef = new Audio(defaultSendSound);
       }
     }
   });
