@@ -58,10 +58,7 @@ export const DisclaimerPopup = (props: DisclaimerPopupProps) => {
           <p
             class="text-gray-700 text-base mb-6"
             style={{ color: popupProps.textColor || 'black' }}
-            innerHTML={
-              popupProps.message ??
-              'By using this chatbot, you agree to the Terms & Conditions.'
-            }
+            innerHTML={popupProps.message ?? 'By using this chatbot, you agree to the Terms & Conditions.'}
           />
 
           <div class="flex justify-center space-x-4">
