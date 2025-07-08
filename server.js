@@ -230,8 +230,8 @@ app.use(validateApiKey);
 const proxyEndpoints = {
   prediction: {
     method: 'POST',
-    path: '/api/v1/prediction/:identifier',
-    target: '/api/v1/prediction',
+    path: '/api/v1/communicate/:identifier',
+    target: '/api/v1/communicate',
   },
   config: {
     method: 'GET',

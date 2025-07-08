@@ -788,7 +788,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     const chatId = params.chatId;
     const input = params.question;
     params.streaming = true;
-    fetchEventSource(`${props.apiHost}/api/v1/prediction/${chatflowid}`, {
+    fetchEventSource(`${props.apiHost}/api/v1/communicate/${chatflowid}`, {
       openWhenHidden: true,
       method: 'POST',
       body: JSON.stringify(params),
