@@ -183,8 +183,7 @@ export type LeadsConfig = {
   successMessage?: string;
 };
 
-
-const lockUI = true
+const lockUI = true;
 
 const defaultWelcomeMessage = 'Hi there! How can I help?';
 
@@ -268,7 +267,7 @@ const defaultWelcomeMessage = 'Hi there! How can I help?';
 const defaultBackgroundColor = '#ffffff';
 const defaultTextColor = '#303235';
 
-const defaultHeaderBackgroundColor = '#000'; 
+const defaultHeaderBackgroundColor = '#000';
 
 /* FeedbackDialog component - for collecting user feedback */
 const FeedbackDialog = (props: {
@@ -1322,7 +1321,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     if (result.data) {
       const chatbotConfig = result.data;
-     
+
       console.log('chatbotConfig:', chatbotConfig);
 
       if (chatbotConfig.flowData) {
@@ -1815,19 +1814,19 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <div
               class="flex flex-row items-center w-full h-[50px] absolute top-0 left-0 z-10"
               style={{
-                background: titleBackgroundColor()||  defaultHeaderBackgroundColor,
+                background: titleBackgroundColor() || defaultHeaderBackgroundColor,
                 color: props.titleTextColor || props.bubbleTextColor || defaultBackgroundColor,
                 'border-top-left-radius': props.isFullPage ? '0px' : '6px',
                 'border-top-right-radius': props.isFullPage ? '0px' : '6px',
               }}
             >
-           <Show when={titleAvatarSrc() !== ''}> 
+              <Show when={titleAvatarSrc() !== ''}>
                 <>
                   <div style={{ width: '15px' }} />
                   <Avatar initialAvatarSrc={titleAvatarSrc()} />
                 </>
-            </Show>  
-              <Show when={chatbotTitle()!== ''}>
+              </Show>
+              <Show when={chatbotTitle() !== ''}>
                 <span class="px-3 whitespace-pre-wrap font-semibold max-w-full">{chatbotTitle()}</span>
               </Show>
               <div style={{ flex: 1 }} />
