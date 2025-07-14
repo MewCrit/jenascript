@@ -183,11 +183,14 @@ export type LeadsConfig = {
   successMessage?: string;
 };
 
+
+const lockUI = true
+
 const defaultWelcomeMessage = 'Hi there! How can I help?';
 
 /*const sourceDocuments = [
     {
-        "pageContent": "I know some are talking about "living with COVID-19". Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you're vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe will never give up on vaccinating more Americans. Now, I know parents with kids under 5 are eager to see a vaccine authorized for their children. \r\n\r\nThe scientists are working hard to get that done and we'll be ready with plenty of vaccines when they do. \r\n\r\nWe're also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.",
+        "pageContent": "I know some are talking about "living with COVID-19". Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you're vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe're also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.",
         "metadata": {
           "source": "blob",
           "blobType": "",
@@ -264,7 +267,8 @@ const defaultWelcomeMessage = 'Hi there! How can I help?';
 
 const defaultBackgroundColor = '#ffffff';
 const defaultTextColor = '#303235';
-const defaultTitleBackgroundColor = '#3B81F6';
+
+const defaultHeaderBackgroundColor = '#000'; 
 
 /* FeedbackDialog component - for collecting user feedback */
 const FeedbackDialog = (props: {
@@ -496,6 +500,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [formDescription, setFormDescription] = createSignal('');
   const [formInputsData, setFormInputsData] = createSignal({});
   const [formInputParams, setFormInputParams] = createSignal([]);
+
+  const [chatbotTitle, setChatbotTitle] = createSignal('');
+  const [botMessage, setBotMessage] = createSignal<BotMessageTheme>();
+  const [userMessage, setUserMessage] = createSignal<UserMessageTheme>();
+
+  const [titleAvatarSrc, setTitleAvatarSrc] = createSignal('');
+  const [titleBackgroundColor, setTitleBackgroundColor] = createSignal('');
 
   // drag & drop file input
   // TODO: fix this type
@@ -1302,16 +1313,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     if (data) {
       setIsChatFlowAvailableToStream(data?.isStreaming ?? false);
     }
-
     // Get the chatbotConfig
     const result = await getChatbotConfig({
       chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
+      apiHost: 'http://localhost:8080',
       onRequest: props.onRequest,
     });
 
     if (result.data) {
       const chatbotConfig = result.data;
+     
+      console.log('chatbotConfig:', chatbotConfig);
 
       if (chatbotConfig.flowData) {
         const nodes = JSON.parse(chatbotConfig.flowData).nodes ?? [];
@@ -1379,6 +1391,27 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         });
         setStarterPrompts(prompts.filter((prompt) => prompt !== ''));
       }
+      if (chatbotConfig.title) {
+        const title = chatbotConfig.title;
+        setChatbotTitle(title);
+      }
+      if (chatbotConfig.botMessage) {
+        const botMessage = chatbotConfig.botMessage;
+        setBotMessage(botMessage);
+      }
+      if (chatbotConfig.userMessage) {
+        const userMessage = chatbotConfig.userMessage;
+        setUserMessage(userMessage);
+      }
+      if (chatbotConfig.titleBackgroundColor) {
+        const titleBackgroundColor = chatbotConfig.titleBackgroundColor;
+        setTitleBackgroundColor(titleBackgroundColor);
+      }
+      if (chatbotConfig.titleAvatarSrc) {
+        const titleAvatarSrc = chatbotConfig.titleAvatarSrc;
+        setTitleAvatarSrc(titleAvatarSrc);
+      }
+
       if (chatbotConfig.chatFeedback) {
         const chatFeedbackStatus = chatbotConfig.chatFeedback.status;
         setChatFeedbackStatus(chatFeedbackStatus);
@@ -1778,24 +1811,24 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </div>
           )}
 
-          {props.showTitle ? (
+          {true ? (
             <div
               class="flex flex-row items-center w-full h-[50px] absolute top-0 left-0 z-10"
               style={{
-                background: props.titleBackgroundColor || props.bubbleBackgroundColor || defaultTitleBackgroundColor,
+                background: titleBackgroundColor()||  defaultHeaderBackgroundColor,
                 color: props.titleTextColor || props.bubbleTextColor || defaultBackgroundColor,
                 'border-top-left-radius': props.isFullPage ? '0px' : '6px',
                 'border-top-right-radius': props.isFullPage ? '0px' : '6px',
               }}
             >
-              <Show when={props.titleAvatarSrc}>
+           <Show when={titleAvatarSrc() !== ''}> 
                 <>
                   <div style={{ width: '15px' }} />
-                  <Avatar initialAvatarSrc={props.titleAvatarSrc} />
+                  <Avatar initialAvatarSrc={titleAvatarSrc()} />
                 </>
-              </Show>
-              <Show when={props.title}>
-                <span class="px-3 whitespace-pre-wrap font-semibold max-w-full">{props.title}</span>
+            </Show>  
+              <Show when={chatbotTitle()!== ''}>
+                <span class="px-3 whitespace-pre-wrap font-semibold max-w-full">{chatbotTitle()}</span>
               </Show>
               <div style={{ flex: 1 }} />
               <DeleteButton
@@ -1824,10 +1857,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                           apiHost={props.apiHost}
                           chatflowid={props.chatflowid}
                           chatId={chatId()}
-                          backgroundColor={props.userMessage?.backgroundColor}
-                          textColor={props.userMessage?.textColor}
-                          showAvatar={props.userMessage?.showAvatar}
-                          avatarSrc={props.userMessage?.avatarSrc}
+                          backgroundColor={userMessage()?.backgroundColor}
+                          textColor={userMessage()?.textColor}
+                          showAvatar={userMessage()?.showAvatar}
+                          avatarSrc={userMessage()?.avatarSrc}
                           fontSize={props.fontSize}
                           renderHTML={props.renderHTML}
                         />
@@ -1839,11 +1872,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                           chatflowid={props.chatflowid}
                           chatId={chatId()}
                           apiHost={props.apiHost}
-                          backgroundColor={props.botMessage?.backgroundColor}
-                          textColor={props.botMessage?.textColor}
+                          backgroundColor={botMessage()?.backgroundColor}
+                          textColor={botMessage()?.textColor}
                           feedbackColor={props.feedback?.color}
-                          showAvatar={props.botMessage?.showAvatar}
-                          avatarSrc={props.botMessage?.avatarSrc}
+                          showAvatar={botMessage()?.showAvatar}
+                          avatarSrc={botMessage()?.avatarSrc}
                           chatFeedbackStatus={chatFeedbackStatus()}
                           fontSize={props.fontSize}
                           isLoading={loading() && index() === messages().length - 1}
