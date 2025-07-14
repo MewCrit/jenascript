@@ -33,7 +33,7 @@ type TextInputProps = {
   maxHistorySize?: number;
 };
 
-const defaultBackgroundColor = '#ffffff';
+const defaultBackgroundColor = '#fff';
 const defaultTextColor = '#303235';
 
 export const TextInput = (props: TextInputProps) => {
@@ -136,7 +136,7 @@ export const TextInput = (props: TextInputProps) => {
 
   return (
     <div
-      class="w-full h-auto max-h-[192px] min-h-[56px] flex flex-col items-end justify-between chatbot-input border border-[#eeeeee]"
+      class="w-[100%] h-auto max-h-[192px] min-h-[56px] flex flex-col items-end justify-between chatbot-input border border-[#eeeeee] rounded-[50px]"
       data-testid="input"
       style={{
         margin: 'auto',

@@ -1,6 +1,6 @@
 import { Show } from 'solid-js';
 import { JSX } from 'solid-js/jsx-runtime';
-import { DeleteIcon, SendIcon } from '../icons';
+import { DeleteIcon, SendIcon, FlyingPlane } from '../icons';
 
 type SendButtonProps = {
   sendButtonColor?: string;
@@ -22,7 +22,7 @@ export const SendButton = (props: SendButtonProps) => {
       style={{ background: 'transparent', border: 'none' }}
     >
       <Show when={!props.isLoading} fallback={<Spinner class="text-white" />}>
-        <SendIcon color={props.sendButtonColor} class={'send-icon flex ' + (props.disableIcon ? 'hidden' : '')} />
+        <FlyingPlane color={props.sendButtonColor} class={'send-icon flex ' + (props.disableIcon ? 'hidden' : '')} />
       </Show>
     </button>
   );
