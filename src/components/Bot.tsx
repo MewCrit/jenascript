@@ -1315,7 +1315,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     // Get the chatbotConfig
     const result = await getChatbotConfig({
       chatflowid: props.chatflowid,
-      apiHost: 'http://localhost:8080',
+      apiHost: props.apiHost,
       onRequest: props.onRequest,
     });
 
